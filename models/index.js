@@ -18,8 +18,6 @@ Category.hasMany(Product, {
 // Products belongsToMany Tags (through ProductTag)
 Product.belongsToMany(Tag, { through: ProductTag });
 
-
-
 // Tags belongsToMany Products (through ProductTag)
 Tag.belongsToMany(Product, { through: ProductTag });
 
