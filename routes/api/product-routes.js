@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
   }).then((data) => {
     if (!res.body) {
       res.status(404).json({ message: `We did not find a Product with ID ${req.params.id}. Please find a valid Product ID and try again!` });
-      return; 
+      return;
     }
     res.json(data);
   });
@@ -82,11 +82,15 @@ router.put('/:id', (req, res) => {
     },
     {
       where: {
-        id: req.params.id, 
+        id: req.params.id,
       },
     }
   )
     .then((product) => {
+      if (res.body === undefined) {
+        res.status(404).json({ message: `We did not find a category with ID ${req.params.id}. Please find a valid category ID and try again!` });
+        return;
+      }
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
     })
@@ -116,7 +120,7 @@ router.put('/:id', (req, res) => {
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
       // console.log(err);
-      res.status(400).json(err);
+      // res.status(400).json(err);
     });
 });
 
@@ -126,7 +130,11 @@ router.delete('/:id', (req, res) => {
     where: { id: req.params.id },
   })
     .then((deletedProduct) => {
-      res.json(deletedProduct);
+      if (deletedProduct === 0) {
+        res.status(404).json({ message: `No rows were affected with nd a category with ID . Please check your category ID and try again!` });
+        return; 
+      }
+      res.json({message: `${deletedProduct} record has been deleted using a Catergory ID ${req.params.id}.`});
     })
     .catch((err) => res.json(err));
 });

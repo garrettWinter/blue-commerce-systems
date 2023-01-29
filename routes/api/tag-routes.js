@@ -68,10 +68,14 @@ router.delete('/:id', (req, res) => {
   Tag.destroy({
     where: { id: req.params.id },
   })
-    .then((deletedTag) => {
-      res.json(deletedTag);
-    })
-    .catch((err) => res.json(err));
+  .then((deletedTag) => {
+    if (deletedTag === 0) {
+      res.status(404).json({ message: `No rows were affected for  Tag ID ${req.params.id} . Please check your Tag ID and try again!` });
+      return; 
+    }
+    res.json({message: `${deletedTag} record has been deleted using a Tag ID ${req.params.id}.`});
+  })
+  .catch((err) => res.json(err));
 });
 
 module.exports = router;

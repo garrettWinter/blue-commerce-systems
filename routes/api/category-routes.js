@@ -31,7 +31,10 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
-  console.log(req.body);
+  if(req.body.category_name === undefined){
+    res.status(404).json({ message: `We did not find see a category_name passed in the body. Please review the body and try again!` });
+    return;
+  }
   Category.create({
     category_name: req.body.category_name,
   })
@@ -45,21 +48,28 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  if(req.body.category_name === undefined){
+    res.status(404).json({ message: `We did not see category_name passed in the body. Please review the body and try again!` });
+    return;
+  }
   Category.update(
     {
       // All the fields you can update and the data attached to the request body.
       category_name: req.body.category_name,
     },
     {
-      // Gets the books based on the isbn given in the request parameters
       where: {
         id: req.params.id,
       },
     }
   )
-    .then((updatedTag) => {
-      // Sends the updated book as a json response
-      res.json("message: Catergory Name has been updated");
+    .then((data) => {
+      // console.log (typeof data);
+      if (data == 0 ) { //This is returning a object type, so will not strickly equals, so made it truthy
+        res.status(404).json({ message: `We did not find a category with ID ${req.params.id}. Please find a valid category ID and try again!` });
+        return; 
+      };
+      res.json({message: "Catergory Name has been updated"});
     })
     .catch((err) => res.json(err));
 });
@@ -70,7 +80,11 @@ router.delete('/:id', (req, res) => {
     where: { id: req.params.id },
   })
     .then((deletedCategory) => {
-      res.json(deletedCategory);
+      if (deletedCategory === 0) {
+        res.status(404).json({ message: `No rows were affected with nd a category with ID . Please check your category ID and try again!` });
+        return; 
+      }
+      res.json({message: `${deletedCategory} record has been deleted using a Catergory ID ${req.params.id}.`});
     })
     .catch((err) => res.json(err));
 });
