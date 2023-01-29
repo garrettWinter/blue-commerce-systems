@@ -32,7 +32,6 @@ router.post('/', (req, res) => {
     category_name: req.body.category_name,
   })
     .then((newCategory) => {
-      // Send the newly created row as a JSON object
       res.json(newCategory);
     })
     .catch((err) => {
@@ -42,6 +41,23 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  Category.update(
+    {
+      // All the fields you can update and the data attached to the request body.
+      category_name: req.body.category_name,
+    },
+    {
+      // Gets the books based on the isbn given in the request parameters
+      where: {
+        id: req.params.id,
+      },
+    }
+  )
+    .then((updatedTag) => {
+      // Sends the updated book as a json response
+      res.json("message: Catergory Name has been updated");
+    })
+    .catch((err) => res.json(err));
 });
 
 router.delete('/:id', (req, res) => {
