@@ -17,9 +17,15 @@ Category.hasMany(Product, {
 
 // Products belongsToMany Tags (through ProductTag)
 Product.belongsToMany(Tag, { through: ProductTag });
+Product.hasMany(ProductTag, {
+  foreignKey: 'product_id',
+});
 
 // Tags belongsToMany Products (through ProductTag)
 Tag.belongsToMany(Product, { through: ProductTag });
+Tag.hasMany(ProductTag, {
+  foreignKey: 'tag_id',
+});
 
 module.exports = {
   Product,
