@@ -21,6 +21,10 @@ router.get('/:id', (req, res) => {
     include: [{ model: Product }],
     where: { id: req.params.id }
   }).then((data) => {
+    if (!res.body) {
+      res.status(404).json({ message: `We did not find a category with ID ${req.params.id}. Please find a valid category ID and try again!` });
+      return; 
+    }
     res.json(data);
   });
 });
