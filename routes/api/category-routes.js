@@ -14,7 +14,6 @@ router.get('/', (req, res) => {
 
   // Returning a single category by ID
 router.get('/:id', (req, res) => {
-  console.log(req.params.id)
   Category.findAll({
     include: [{ model: Product }], // joining the category and product tables together
     where: { id: req.params.id }

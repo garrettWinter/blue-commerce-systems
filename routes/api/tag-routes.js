@@ -34,7 +34,6 @@ router.post('/', (req, res) => {
     res.status(404).json({ message: `We did not find see a tag_name passed in the body. Please review the body and try again!` });
     return;
   }
-  console.log(req.body);
   Tag.create({
     tag_name: req.body.tag_name,
   })
