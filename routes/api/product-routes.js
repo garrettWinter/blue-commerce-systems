@@ -3,25 +3,24 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/products` endpoint
 
-// get all products
+// Returning all Products
 router.get('/', (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
   Product.findAll({
-    include: [{ model: ProductTag }, { model: Tag }, { model: Category }]
+    include: [{ model: ProductTag }, { model: Tag }, { model: Category }] // joining all 4 tables together
   }).then((data) => {
     res.json(data);
   });
 });
 
-// get one product
+// Returning a single product by ID
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
   Product.findAll({
-    include: [{ model: ProductTag }, { model: Tag }, { model: Category }],
+    include: [{ model: ProductTag }, { model: Tag }, { model: Category }], // joining all 4 tables together
     where: { id: req.params.id }
   }).then((data) => {
+    //Messaging back to user if no product ID was found
     if (!res.body) {
       res.status(404).json({ message: `We did not find a Product with ID ${req.params.id}. Please find a valid Product ID and try again!` });
       return;
@@ -30,17 +29,21 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// create new product
+// API to create a new Product
 router.post('/', (req, res) => {
-  console.log(req.body);
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
+  // Validation to make sure required feilds for product table are present and advises which is missing.
+  if (req.body.product_name === undefined && req.body.price === undefined) {
+    res.status(404).json({ message: `We did not find see product_name or price passed in the body. Please revise the body and try again!` });
+    return;
+  };
+  if (req.body.product_name === undefined) {
+    res.status(404).json({ message: `We did not find see a product_name passed in the body. Please revise the body and try again!` });
+    return;
+  };
+  if (req.body.price === undefined) {
+    res.status(404).json({ message: `We did not find see a price passed in the body. Please revise the body and try again!` });
+    return;
+  };
   Product.create({
     product_name: req.body.product_name,
     price: req.body.price,
@@ -69,9 +72,8 @@ router.post('/', (req, res) => {
     });
 });
 
-// update product
+// Updating a product by its `id` value
 router.put('/:id', (req, res) => {
-  // update product data
   Product.update(
     {
       product_name: req.body.product_name,
@@ -87,9 +89,15 @@ router.put('/:id', (req, res) => {
     }
   )
     .then((product) => {
-      if (res.body === undefined) {
-        res.status(404).json({ message: `We did not find a category with ID ${req.params.id}. Please find a valid category ID and try again!` });
+      if (product == 0) {
+        //If 0 rows are affected, advising to user that no match was found
+        res.status(404).json({ message: `Failure to update any records. Please find a valid product ID and try again!` });
         return;
+      }
+      //more than 0 rows are affected, advising sucuss and how many.
+      if (product > 0) {
+        res.status(200).json({ message: `Sucussfully updated ${product} record(s).` });
+        ;
       }
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
@@ -119,22 +127,21 @@ router.put('/:id', (req, res) => {
     })
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
-      // console.log(err);
-      // res.status(400).json(err);
     });
 });
 
+// delete one product by its `id` value
 router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
   Product.destroy({
     where: { id: req.params.id },
   })
     .then((deletedProduct) => {
+      //Messaging to user that no rows were affected by delete.
       if (deletedProduct === 0) {
         res.status(404).json({ message: `No rows were affected with nd a category with ID . Please check your category ID and try again!` });
-        return; 
+        return;
       }
-      res.json({message: `${deletedProduct} record has been deleted using a Catergory ID ${req.params.id}.`});
+      res.json({ message: `${deletedProduct} record has been deleted using a Catergory ID ${req.params.id}.` });
     })
     .catch((err) => res.json(err));
 });
