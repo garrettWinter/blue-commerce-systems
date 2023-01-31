@@ -1,4 +1,4 @@
-# Blue Commerce Systems
+# blue-commerce-systems
 
 ## Badges
 
@@ -35,7 +35,7 @@ Here are some details on how this application can be used:
   - Once application has been cloned and modules installed you can start the server runing node server.js
   - Use insomina or another API application to use API calls to Create, Read, Update, and Delete products in the database.
   - A demo of the application can be viewed here
-    - ADD DEMO URL HERE!!!
+    - https://garrettwinter.github.io/blue-commerce-systems/public/assets/media/Blue-Commerce-Systems-DEMO.webm
       
 Below a screenshot(s) of the application:
   - ![Insomnia Screenshot for the Categories GET ALL API Call](./assets/images/API-GET-All-Categories.png)
