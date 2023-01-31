@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
     where: { id: req.params.id }
   }).then((data) => {
     //Messaging back to user if no Tag ID was found
-    if (!res.body) {
+    if (data.length == 0) {
       res.status(404).json({ message: `We did not find a Tag with ID ${req.params.id}. Please find a valid Tag ID and try again!` });
       return;
     }
@@ -68,7 +68,7 @@ router.put('/:id', (req, res) => {
         res.status(404).json({ message: `No records were modified with this put request for id ${req.params.id}. Please check your id, and updated name and try again!` });
         return;
       };
-      res.json({ message: "Catergory Name has been updated" });
+      res.json({ message: "Tag Name has been updated" });
     })
     .catch((err) => res.json(err));
 });

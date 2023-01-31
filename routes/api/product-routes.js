@@ -15,13 +15,12 @@ router.get('/', (req, res) => {
 // Returning a single product by ID
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
   Product.findAll({
     include: [{ model: ProductTag }, { model: Tag }, { model: Category }], // joining all 4 tables together
     where: { id: req.params.id }
   }).then((data) => {
     //Messaging back to user if no product ID was found
-    if (!res.body) {
+    if (data.length == 0) {
       res.status(404).json({ message: `We did not find a Product with ID ${req.params.id}. Please find a valid Product ID and try again!` });
       return;
     }

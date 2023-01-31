@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { response } = require('express');
 const { Category, Product } = require('../../models');
 
 // The `/api/categories` endpoint
@@ -19,7 +20,7 @@ router.get('/:id', (req, res) => {
     where: { id: req.params.id }
   }).then((data) => {
     //Messaging back to user if no category ID was found
-    if (!res.body) {
+    if (data.length == 0) {
       res.status(404).json({ message: `We did not find a category with ID ${req.params.id}. Please find a valid category ID and try again!` });
       return; 
     }
