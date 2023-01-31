@@ -93,7 +93,7 @@ router.put('/:id', (req, res) => {
         res.status(404).json({ message: `Failure to update any records. Please find a valid product ID and try again!` });
         return;
       }
-      //more than 0 rows are affected, advising sucuss and how many.
+      //more than 0 rows are affected, advising success and how many.
       if (product > 0) {
         res.status(200).json({ message: `Sucussfully updated ${product} record(s).` });
         ;
@@ -137,13 +137,14 @@ router.delete('/:id', (req, res) => {
     .then((deletedProduct) => {
       //Messaging to user that no rows were affected by delete.
       if (deletedProduct === 0) {
-        res.status(404).json({ message: `No rows were affected with nd a category with ID . Please check your category ID and try again!` });
+        res.status(404).json({ message: `No rows were affected with category with ID . Please check your category ID and try again!` });
         return;
       }
-      res.json({ message: `${deletedProduct} record has been deleted using a Catergory ID ${req.params.id}.` });
+      res.json({ message: `${deletedProduct} record has been deleted using a Category ID ${req.params.id}.` });
     })
     .catch((err) => res.json(err));
 });
 
-
 module.exports = router;
+
+

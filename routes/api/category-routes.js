@@ -65,7 +65,7 @@ router.put('/:id', (req, res) => {
   )
     .then((data) => {
       //If 0 rows are affected, advising to user that no match was found
-      if (data == 0 ) { //This is returning a object type, so will not strickly equals, so made it truthy
+      if (data == 0 ) { //This is returning a object type, so will not strictly equals, so made it truthy
         res.status(404).json({ message: `We did not find a category with ID ${req.params.id}. Please find a valid category ID and try again!` });
         return; 
       };
@@ -91,3 +91,5 @@ router.delete('/:id', (req, res) => {
 });
 
 module.exports = router;
+
+

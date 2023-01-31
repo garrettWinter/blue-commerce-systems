@@ -64,7 +64,7 @@ router.put('/:id', (req, res) => {
   )
     .then((updatedTag) => {
       //If 0 rows are affected, advising to user that no match was found
-      if (updatedTag == 0) { //This is returning a object type, so will not strickly equals, so made it truthy
+      if (updatedTag == 0) { //This is returning a object type, so will not strictly equals, so made it truthy
         res.status(404).json({ message: `No records were modified with this put request for id ${req.params.id}. Please check your id, and updated name and try again!` });
         return;
       };
@@ -90,3 +90,5 @@ router.delete('/:id', (req, res) => {
 });
 
 module.exports = router;
+
+
